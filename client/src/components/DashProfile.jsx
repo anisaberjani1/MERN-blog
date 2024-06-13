@@ -44,7 +44,7 @@ export default function DashProfile() {
                 (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 setImageFileUploadProgress(progress.toFixed(0))
             },
-            (error) => {
+            () => {
                 setImageFileUploadError(
                     'Could not upload image (File must be less than 2MB)'
                 );
@@ -88,7 +88,7 @@ export default function DashProfile() {
                     }}/>
                 )}
                 <img src={imageFileUrl || currentUser.profilePicture} alt="user" 
-                    className={`rounded-full w-full h-full object-cover border-8 border-[lightgray] 
+                    className={`rounded-full w-full h-full object-cover border-6 border-[lightgray] 
                         ${imageFileUploadProgress && imageFileUploadProgress<100  && 'opacity-60'}`} />
             </div>
             {imageFileUploadError && (
