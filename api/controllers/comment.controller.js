@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import Comment from "../models/comment.model.js";
 import { errorHandler } from "../utils/error.js";
 
@@ -101,6 +102,41 @@ export const deleteComment = async(req,res,next) => {
         await comment.destroy();
         
         res.status(200).json('Comment has been deleted');
+
+    }catch(error){
+        next(error);
+    }
+}
+
+export const getComments = async(req,res,next) => {
+    if(!req.user.isAdmin) 
+        return next(errorHandler(403,'You are not allowed to get commments'))
+    
+    try{
+        const startIndex = parseInt(req.query.startIndex) || 0;
+        const limit = parseInt(req.query.limit) || 9;
+        const sortDirection = req.query.sort === 'desc' ? 'DESC' : 'ASC';
+
+        const comments = await Comment.findAll({
+            order: [['createdAt', sortDirection]],
+            offset: startIndex,
+            limit: limit
+        })
+            
+        
+        const totalComments = await Comment.count();
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+        const lastMonthComments = await Comment.count({
+            where: {
+                createdAt: {
+                    [Op.gte]: oneMonthAgo,
+                },
+            },
+        });
+
+        res.status(200).json({comments, totalComments, lastMonthComments});
 
     }catch(error){
         next(error);
