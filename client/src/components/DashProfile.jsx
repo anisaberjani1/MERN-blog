@@ -154,9 +154,13 @@ export default function DashProfile() {
     <div className='max-w-lg mx-auto p-3 w-full'>
         <h1 className='my-7 text-center font-semibold text-3xl'>Profile</h1>
         <form onSubmit={handleSubmit} className='flex flex-col gap-5'>
-            <input type="file" accept='image/*' 
+            <input 
+                type="file" 
+                accept='image/*' 
                 onChange={handleImageChange} 
-                ref={filePickerRef} hidden/>
+                ref={filePickerRef}
+                hidden
+            />
             <div className='relative w-32 h-32 self-center cursor-pointer shadow-md overflow-hidden rounded-full' 
                 onClick={() => filePickerRef.current.click()}>
                 {imageFileUploadProgress && (
@@ -173,13 +177,15 @@ export default function DashProfile() {
                                 left: 0
                             },
                             path: {
-                                stroke: `rgba(62, 152,199, ${imageFileUploadProgress / 100})`,
+                                stroke: `rgba(62, 152,199, 
+                                ${imageFileUploadProgress / 100})`,
                         }
                     }}/>
                 )}
                 <img src={imageFileUrl || currentUser.profilePicture} alt="user" 
                     className={`rounded-full w-full h-full object-cover border-6 border-[lightgray] 
-                        ${imageFileUploadProgress && imageFileUploadProgress<100  && 'opacity-60'}`} />
+                        ${imageFileUploadProgress && 
+                        imageFileUploadProgress<100  && 'opacity-60'}`} />
             </div>
             {imageFileUploadError && (
                 <Alert color='failure'>
